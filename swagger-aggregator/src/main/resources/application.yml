@@ -1,0 +1,27 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+    metrics:
+      enabled: true
+server:
+  port: 5000
+
+documentation:
+  baseurl: http://localhost
+  swagger:
+    services:
+      - name: rabbitmq-consumer
+        url: ${documentation.baseurl}:8181/v2/api-docs?group=rabbitmq-consumer-v1
+        version: 2.0
+      - name: rabbitmq-subscriber
+        url: ${documentation.baseurl}:8080/v2/api-docs?group=rabbitmq-subscriber-v1
+        version: 2.0

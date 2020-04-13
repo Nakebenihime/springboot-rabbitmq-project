@@ -1,0 +1,66 @@
+version: '3.7'
+services:
+  aggregator:
+    hostname: swagger-aggregator
+    container_name: swagger-aggregator
+    image: swagger-aggregator
+    restart: always
+    ports:
+      - "5000:5000"
+  consumer:
+    hostname: rabbitmq-consumer
+    container_name: rabbitmq-consumer
+    image: rabbitmq-consumer
+    restart: always
+    ports:
+      - "8181:8181"
+    depends_on:
+      - rabbitmq
+      - mongodb
+  subscriber:
+    hostname: rabbitmq-subscriber
+    container_name: rabbitmq-subscriber
+    image: rabbitmq-subscriber
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+      - mongodb
+  mongodb:
+    hostname: mongo
+    container_name: mongo
+    image: mongo
+    ports:
+      - "27000:27017"
+    environment:
+      MONGO_INITDB_DATABASE: "notification"
+  rabbitmq:
+    hostname: rabbitmq
+    container_name: rabbitmq
+    image: rabbitmq:3.8.2-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "rabbitmq"
+      RABBITMQ_DEFAULT_PASS: "rabbitmq"
+      RABBITMQ_DEFAULT_VHOST: "rabbitmq"
+  prometheus:
+    hostname: prometheus
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+    - "9090:9090"
+    volumes:
+    - C:\Users\MARIO\IdeaProjects\springboot-rabbitmq-project\prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - aggregator
+      - subscriber
+      - consumer
+  grafana:
+    hostname: grafana
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - "3000:3000"

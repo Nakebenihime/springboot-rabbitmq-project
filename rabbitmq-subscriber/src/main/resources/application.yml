@@ -1,0 +1,33 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true
+    metrics:
+      enabled: true
+      tags:
+        application:
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongo:27000/notification
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: rabbitmq
+    password: rabbitmq
+    virtual-host: rabbitmq
+messaging:
+  rabbitmq:
+    messaging-exchange: messaging-exchange
+    messaging-queue: messaging-queue
+    messaging-routingkey: messaging-queue
+server:
+  port: 8080
